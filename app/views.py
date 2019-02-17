@@ -28,17 +28,17 @@ class SolicitacaoEmprestimo(APIView):
             id = body_dict['usuario']['cpf'] + '_' + datetime.now().strftime('%Y%m%d%H%M%S')
             save_obj(body_dict, id)
 
-            df = pd.DataFrame.from_dict(body_dict['transacao'], orient='index')
-            df['cpf'] = id
+            df = pd.DataFrame([list(body_dict['transacao'].values())], columns=list(body_dict['transacao'].keys()))
+            df['id'] = id
             df.to_pickle(f'{path_database}/#transacao.pkl')
             del df
 
-            df = pd.DataFrame.from_dict(body_dict['usuario'], orient='index')
+            df = pd.DataFrame([list(body_dict['usuario'].values())], columns=list(body_dict['usuario'].keys()))
             df.to_pickle(f'{path_database}/#usuario.pkl')
             del df
 
             df = pd.DataFrame.from_dict(body_dict['historico'], orient='columns')
-            df['cpf'] = int(save_obj['usuario']['cpf'])
+            df['cpf'] = int(body_dict['usuario']['cpf'])
             df.to_pickle(f'{path_database}/#historico.pkl')
             del df
 

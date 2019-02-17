@@ -23,12 +23,12 @@ class SolicitacaoEmprestimo(APIView):
         dicio = {}
 
         try:
-            def extrair():
-                ''' salvar json '''
-                body_dict = json.loads(str(request.body, encoding='utf-8'))
-                id = body_dict['usuario']['cpf'] + '_' + datetime.now().strftime('%Y%m%d%H%M%S')
-                save_obj(body_dict, id)
+            ''' salvar json '''
+            body_dict = json.loads(str(request.body, encoding='utf-8'))
+            id = body_dict['usuario']['cpf'] + '_' + datetime.now().strftime('%Y%m%d%H%M%S')
+            save_obj(body_dict, id)
 
+            def extrair():
                 df = pd.DataFrame([list(body_dict['transacao'].values())], columns=list(body_dict['transacao'].keys()))
                 df['id'] = id
                 df['cpf'] = int(body_dict['usuario']['cpf'])
@@ -46,10 +46,17 @@ class SolicitacaoEmprestimo(APIView):
             extrair()
 
             def modelo():
-                return random.randint(0, 1)
+                if 5 < body_dict['transacao']['valor_emprestimo'] < 100:
+                    return random.randint(0, 1)
+                else:
+                    return 0
             flag = modelo()
 
-            dicio['flag_aprovacao'] = flag
+            if flag:
+                dicio['flag_aprovacao'] = flag
+                dicio['valor_emprestimo'] = body_dict['transacao']['valor_emprestimo']
+            else:
+                dicio['flag_aprovacao'] = flag
 
             if len(dicio) > 10000:
                 dicio = {'status': 'limit exceeded', 'dados': ''}

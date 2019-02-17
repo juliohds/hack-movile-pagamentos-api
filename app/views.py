@@ -4,18 +4,15 @@ from rest_framework.response import Response
 from rest_framework import status
 from datetime import date, timedelta, datetime
 import pandas as pd
-import pickle
-import random
 from __config__ import save_obj, path_data
 import json
+from batch.modelo import modelo_knn
 
 
 delay = 1
 d0 = date.today() - timedelta(days=1+delay)
 d30 = (date.today() - timedelta(days=31+delay))
 d90 = (date.today() - timedelta(days=91+delay))
-
-# full_devedor = pd.read_pickle(r'\\' + ip['ip_thanus_fonte'] + r"\ProjetosDW\data\load\#devedor.pkl")
 
 
 class SolicitacaoEmprestimo(APIView):
@@ -45,12 +42,11 @@ class SolicitacaoEmprestimo(APIView):
                 del df
             extrair()
 
-            def modelo():
-                if 5 < body_dict['transacao']['valor_emprestimo'] < 100:
-                    return random.randint(0, 1)
-                else:
-                    return 0
-            flag = modelo()
+            import data.load as _l
+            import random
+            dm = _l.dm_model.open()
+
+            flag = random.randint(0, 1) # modelo_knn(dm)
 
             if flag:
                 dicio['flag_aprovacao'] = flag

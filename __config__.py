@@ -6,8 +6,8 @@ ajusta_coluna = pd.set_option("display.max_columns", 100)
 ajusta_largura = pd.set_option('display.width', 150)
 
 path = path.dirname(__file__)
-path_app = path + r'\app'
-path_data = path + r'\data'
+path_app = path.join(path, 'app')
+path_data = path.join(path, 'data')
 path_extract = path_data + r'\extract'
 path_load = path_data + r'\load'
 

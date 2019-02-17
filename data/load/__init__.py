@@ -1,4 +1,4 @@
-from __config__ import path_load
+from __config__ import path_load, ajusta_path
 import os
 import pandas as pd
 
@@ -8,7 +8,7 @@ class e_master(object):
         self.name = self.__class__.__name__
 
     def open(self):
-        return pd.read_pickle(f"{path_load}\#{self.name}.pkl")
+        return pd.read_pickle(ajusta_path(path_load, f'#{self.name}.pkl'))
 
 
 files = os.listdir(path_load)

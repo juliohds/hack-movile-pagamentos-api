@@ -6,7 +6,7 @@ from datetime import date, timedelta, datetime
 import pandas as pd
 import pickle
 import random
-from __config__ import save_obj, path_database
+from __config__ import save_obj, path_data
 import json
 
 
@@ -23,26 +23,32 @@ class SolicitacaoEmprestimo(APIView):
         dicio = {}
 
         try:
-            ''' salvar json '''
-            body_dict = json.loads(str(request.body, encoding='utf-8'))
-            id = body_dict['usuario']['cpf'] + '_' + datetime.now().strftime('%Y%m%d%H%M%S')
-            save_obj(body_dict, id)
+            def extrair():
+                ''' salvar json '''
+                body_dict = json.loads(str(request.body, encoding='utf-8'))
+                id = body_dict['usuario']['cpf'] + '_' + datetime.now().strftime('%Y%m%d%H%M%S')
+                save_obj(body_dict, id)
 
-            df = pd.DataFrame([list(body_dict['transacao'].values())], columns=list(body_dict['transacao'].keys()))
-            df['id'] = id
-            df.to_pickle(f'{path_database}/#transacao.pkl')
-            del df
+                df = pd.DataFrame([list(body_dict['transacao'].values())], columns=list(body_dict['transacao'].keys()))
+                df['id'] = id
+                df.to_pickle(f'{path_data}/extract/transacao/transacao_{datetime.now().strftime("%Y%m%d%H%M%S")}.pkl')
+                del df
 
-            df = pd.DataFrame([list(body_dict['usuario'].values())], columns=list(body_dict['usuario'].keys()))
-            df.to_pickle(f'{path_database}/#usuario.pkl')
-            del df
+                df = pd.DataFrame([list(body_dict['usuario'].values())], columns=list(body_dict['usuario'].keys()))
+                df.to_pickle(f'{path_data}/extract/usuario/usuario_{datetime.now().strftime("%Y%m%d%H%M%S")}.pkl')
+                del df
 
-            df = pd.DataFrame.from_dict(body_dict['historico'], orient='columns')
-            df['cpf'] = int(body_dict['usuario']['cpf'])
-            df.to_pickle(f'{path_database}/#historico.pkl')
-            del df
+                df = pd.DataFrame.from_dict(body_dict['historico'], orient='columns')
+                df['cpf'] = int(body_dict['usuario']['cpf'])
+                df.to_pickle(f'{path_data}/extract/historico/historico_{datetime.now().strftime("%Y%m%d%H%M%S")}.pkl')
+                del df
+            extrair()
 
-            dicio['flag_aprovacao'] = random.randint(0, 1)
+            def modelo():
+                return random.randint(0, 1)
+            flag = modelo()
+
+            dicio['flag_aprovacao'] = flag
 
             if len(dicio) > 10000:
                 dicio = {'status': 'limit exceeded', 'dados': ''}

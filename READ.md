@@ -31,8 +31,8 @@ Clonar diretamente do repositório no GitHub.
 
 ```sh
 $ git clone https://github.com/juliohds/hack-movile-pagamentos-api.git
+$ git clone https://github.com/juliohds/hack-movile-pagamentos-app.git
 $ git clone https://github.com/juliohds/hack-movile-pagamentos-front.git
-$ git clone https://github.com/juliohds/hack-movile-pagamentos-api.git
 ```
 
 na API do Django:

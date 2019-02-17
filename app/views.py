@@ -31,6 +31,7 @@ class SolicitacaoEmprestimo(APIView):
 
                 df = pd.DataFrame([list(body_dict['transacao'].values())], columns=list(body_dict['transacao'].keys()))
                 df['id'] = id
+                df['cpf'] = int(body_dict['usuario']['cpf'])
                 df.to_pickle(f'{path_data}/extract/transacao/transacao_{datetime.now().strftime("%Y%m%d%H%M%S")}.pkl')
                 del df
 
@@ -39,7 +40,7 @@ class SolicitacaoEmprestimo(APIView):
                 del df
 
                 df = pd.DataFrame.from_dict(body_dict['historico'], orient='columns')
-                df['cpf'] = int(body_dict['usuario']['cpf'])
+                df['id'] = id
                 df.to_pickle(f'{path_data}/extract/historico/historico_{datetime.now().strftime("%Y%m%d%H%M%S")}.pkl')
                 del df
             extrair()

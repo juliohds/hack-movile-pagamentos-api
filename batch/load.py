@@ -12,3 +12,7 @@ def reload():
             df_total = pd.concat([df, df_total])
 
         df_total.to_pickle(f'{path_load}\#{tipo_arquivo}.pkl')
+
+
+if __name__ == '__main__':
+    reload()

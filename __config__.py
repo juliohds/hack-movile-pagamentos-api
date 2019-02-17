@@ -1,6 +1,9 @@
 import pickle
 from os import path
+import pandas as pd
 
+ajusta_coluna = pd.set_option("display.max_columns", 100)
+ajusta_largura = pd.set_option('display.width', 150)
 
 path = path.dirname(__file__)
 path_app = path + r'\app'
